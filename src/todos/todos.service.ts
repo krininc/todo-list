@@ -30,8 +30,8 @@ export class TodosService {
   findAll(): Todo[] {
     return this.todos;
   }
-
-  update(id: string, updateTodoDto: CreateTodoDto): Todo {
+  
+update(id: string, updateTodoDto: CreateTodoDto): Todo {
     const index = this.todos.findIndex(todo => todo.id === id);
     if (index !== -1) {
       this.todos[index] = { ...this.todos[index], ...updateTodoDto };
@@ -40,6 +40,7 @@ export class TodosService {
     }
     return null;
   }
+  
 
   remove(id: string): { message: string } {
     const index = this.todos.findIndex(todo => todo.id === id);
