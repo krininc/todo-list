@@ -58,12 +58,12 @@ export class TodosService {
   findReminders(): Todo[] {
     return this.todos
       .filter(todo => {
-        const parsedDate = parse(todo.reminder, 'dd-MM-yyyy', new Date());
+        const parsedDate = parse(todo.reminder, 'dd/MM/yyyy', new Date());
         return isValid(parsedDate);
       })
       .sort((a, b) => {
-        const dateA = parse(a.reminder, 'dd-MM-yyyy', new Date());
-        const dateB = parse(b.reminder, 'dd-MM-yyyy', new Date());
+        const dateA = parse(a.reminder, 'dd/MM/yyyy', new Date());
+        const dateB = parse(b.reminder, 'dd/MM/yyyy', new Date());
         return dateA.getTime() - dateB.getTime();
       });
   }
