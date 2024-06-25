@@ -18,8 +18,8 @@ export class TodosService {
     const newTodo: Todo = {
       id: uuidv4(),
       ...createTodoDto,
-      reminder: format(parse(createTodoDto.reminder, 'dd-MM-yyyy', new Date()), 'dd-MM-yyyy'),
-      dueDate: format(parse(createTodoDto.dueDate, 'dd-MM-yyyy', new Date()), 'dd-MM-yyyy'),
+      reminder: format(parse(createTodoDto.reminder, 'dd/MM/yyyy', new Date()), 'dd/MM/yyyy'),
+      dueDate: format(parse(createTodoDto.dueDate, 'dd/MM/yyyy', new Date()), 'dd/MM/yyyy'),
       status: 'incomplete',
     };
     this.todos.push(newTodo);
