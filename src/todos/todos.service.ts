@@ -18,8 +18,8 @@ export class TodosService {
     const newTodo: Todo = {
       id: uuidv4(),
       ...createTodoDto,
-      reminder: format(parse(createTodoDto.reminder, 'dd/MM/yyyy', new Date()), 'dd/MM/yyyy'),
-      dueDate: format(parse(createTodoDto.dueDate, 'dd/MM/yyyy', new Date()), 'dd/MM/yyyy'),
+      reminder: createTodoDto.reminder ? format(parse(createTodoDto.reminder, 'yyyy-MM-dd', new Date()), 'yyyy-MM-dd') : null,
+      dueDate: format(parse(createTodoDto.dueDate, 'yyyy-MM-dd', new Date()), 'yyyy-MM-dd'),
       status: 'incomplete',
     };
     this.todos.push(newTodo);
@@ -30,7 +30,7 @@ export class TodosService {
   findAll(): Todo[] {
     return this.todos;
   }
-  
+
 update(id: string, updateTodoDto: CreateTodoDto): Todo {
     const index = this.todos.findIndex(todo => todo.id === id);
     if (index !== -1) {
@@ -59,12 +59,12 @@ update(id: string, updateTodoDto: CreateTodoDto): Todo {
   findReminders(): Todo[] {
     return this.todos
       .filter(todo => {
-        const parsedDate = parse(todo.reminder, 'dd/MM/yyyy', new Date());
+        const parsedDate = parse(todo.reminder, 'yyyy-MM-dd', new Date());
         return isValid(parsedDate);
       })
       .sort((a, b) => {
-        const dateA = parse(a.reminder, 'dd/MM/yyyy', new Date());
-        const dateB = parse(b.reminder, 'dd/MM/yyyy', new Date());
+        const dateA = parse(a.reminder, 'yyyy-MM-dd', new Date());
+        const dateB = parse(b.reminder, 'yyyy-MM-dd', new Date());
         return dateA.getTime() - dateB.getTime();
       });
   }
@@ -80,5 +80,11 @@ update(id: string, updateTodoDto: CreateTodoDto): Todo {
       const data = fs.readFileSync(filePath, 'utf-8');
       this.todos = JSON.parse(data);
     }
+  }
+
+
+  findByToday(): Todo[] {
+    const today = format(new Date(), 'yyyy-MM-dd');
+    return this.todos.filter(todo => todo.dueDate === today);
   }
 }

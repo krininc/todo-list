@@ -36,4 +36,9 @@ export class TodosController {
   findReminders(): Todo[] {
     return this.todosService.findReminders();
   }
+
+  @Get('today')
+  findByToday(): Todo[] {
+    return this.todosService.findByToday();
+  }
 }
