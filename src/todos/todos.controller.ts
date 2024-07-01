@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+  NotFoundException,
+} from '@nestjs/common';
 import { TodosService } from './todos.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { Todo } from './interfaces/todo.interface';
@@ -40,5 +50,14 @@ export class TodosController {
   @Get('today')
   findByToday(): Todo[] {
     return this.todosService.findByToday();
+  }
+
+  @Put(':id/complete')
+  markTodoComplete(@Param('id') id: string) {
+    const updatedTodo = this.todosService.updateStatus(id, 'complete');
+    if (!updatedTodo) {
+      throw new NotFoundException(`Todo with ID ${id} not found`);
+    }
+    return updatedTodo;
   }
 }

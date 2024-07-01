@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { Todo } from './interfaces/todo.interface';
@@ -18,8 +19,16 @@ export class TodosService {
     const newTodo: Todo = {
       id: uuidv4(),
       ...createTodoDto,
-      reminder: createTodoDto.reminder ? format(parse(createTodoDto.reminder, 'yyyy-MM-dd', new Date()), 'yyyy-MM-dd') : null,
-      dueDate: format(parse(createTodoDto.dueDate, 'yyyy-MM-dd', new Date()), 'yyyy-MM-dd'),
+      reminder: createTodoDto.reminder
+        ? format(
+            parse(createTodoDto.reminder, 'yyyy-MM-dd', new Date()),
+            'yyyy-MM-dd',
+          )
+        : null,
+      dueDate: format(
+        parse(createTodoDto.dueDate, 'yyyy-MM-dd', new Date()),
+        'yyyy-MM-dd',
+      ),
       status: 'incomplete',
     };
     this.todos.push(newTodo);
@@ -31,8 +40,8 @@ export class TodosService {
     return this.todos;
   }
 
-update(id: string, updateTodoDto: CreateTodoDto): Todo {
-    const index = this.todos.findIndex(todo => todo.id === id);
+  update(id: string, updateTodoDto: CreateTodoDto): Todo {
+    const index = this.todos.findIndex((todo) => todo.id === id);
     if (index !== -1) {
       this.todos[index] = { ...this.todos[index], ...updateTodoDto };
       this.saveToFile();
@@ -40,10 +49,9 @@ update(id: string, updateTodoDto: CreateTodoDto): Todo {
     }
     return null;
   }
-  
 
   remove(id: string): { message: string } {
-    const index = this.todos.findIndex(todo => todo.id === id);
+    const index = this.todos.findIndex((todo) => todo.id === id);
     if (index !== -1) {
       this.todos.splice(index, 1);
       this.saveToFile();
@@ -53,12 +61,12 @@ update(id: string, updateTodoDto: CreateTodoDto): Todo {
   }
 
   findByLabel(label: string): Todo[] {
-    return this.todos.filter(todo => todo.labels.includes(label));
+    return this.todos.filter((todo) => todo.labels.includes(label));
   }
 
   findReminders(): Todo[] {
     return this.todos
-      .filter(todo => {
+      .filter((todo) => {
         const parsedDate = parse(todo.reminder, 'yyyy-MM-dd', new Date());
         return isValid(parsedDate);
       })
@@ -82,9 +90,18 @@ update(id: string, updateTodoDto: CreateTodoDto): Todo {
     }
   }
 
-
   findByToday(): Todo[] {
     const today = format(new Date(), 'yyyy-MM-dd');
-    return this.todos.filter(todo => todo.dueDate === today);
+    return this.todos.filter((todo) => todo.dueDate === today);
+  }
+
+  updateStatus(id: string, status: string): Todo {
+    const index = this.todos.findIndex((todo) => todo.id === id);
+    if (index !== -1) {
+      this.todos[index].status = status;
+      this.saveToFile();
+      return this.todos[index];
+    }
+    return null;
   }
 }
